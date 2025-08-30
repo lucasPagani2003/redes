@@ -474,3 +474,610 @@ Internet: salida al mundo.
 👉 La frase que anotaste “Red inalámbrica, la transmisión de los datos van por el aire” aplica al acceso (RAN).
 Pero ojo: el transporte (backhaul) casi siempre es fibra óptica o radioenlace, no va por el aire como el acceso entre celular y antena.
 ```
+
+# Clase 3. Viernes 29/08
+
+https://www.youtube.com/watch?v=iOwfK8n8dMs&list=PLgjTEtKoGsVoxJIuvWQH-HLS33xVZTQj_&index=2
+
+## Introducción a sistemas comunicaciones.
+
+¿Como es que con la digitalizacion se pueden hacer transmiciones de datos confiables? 
+
+- Señal analógica: Son variables eléctricas continuas en el tiempo, pueden ser en forma de una corriente, una tensión o una carga eléctrica. (Varían en forma continua entre un límite inferior y un límite superior). Para señales periódicas podemos definir ciertos parámetros como el período T.
+
+- Señal digital: Son variables eléctricas con dos niveles (0 o 1). Su variación en el tiempo contiene la información a transferir acorde a una codificación a utilizar.
+
+¿Que ocurre con las señales? Son analógicas! NO son digitales. 
+
+Si todo lo que necesitamos utilizar y todo lo que necesitamos procesar como señales, son analogicas, ¿Como hacemos para despues de procesar, transmitir y decodificar del otro lado, realmente se escuche lo que estamos transmitiendo? 
+
+Nuestra necesidad es encontrar la manera de convertir las señales analogicas que son propias del mundo real en señales digitales que son propias del mundo de comunicaciones que nosotros diseñamos.
+
+![sistComunicaciones](img/sistComunicaciones.png)
+
+```
+Excelente apunte 👌. Lo que anotaste es la pregunta central de la comunicación moderna:
+
+👉 Si el mundo es analógico (voz, música, imágenes, temperatura), ¿cómo hacemos para transmitirlo de manera confiable en un sistema digital (computadoras, redes, Internet)?
+
+🔹 1. El mundo es analógico
+
+Tu voz → son ondas de presión en el aire (continuas).
+
+Una guitarra → vibra con frecuencias.
+
+Una cámara → capta luz con intensidades.
+
+Todo eso son señales analógicas: pueden tomar infinitos valores en un rango.
+
+🔹 2. El problema
+
+Las señales analógicas son muy sensibles al ruido.
+
+Si mandás voz por un cable analógico muy largo, con cada metro se distorsiona y pierde calidad.
+
+En radio AM/FM escuchás ruidos de interferencia.
+
+👉 Por eso, en telecomunicaciones se busca digitalizar: pasar de analógico → digital.
+
+🔹 3. La idea de la digitalización
+
+Tomamos la señal analógica y la muestreamos (Nyquist → al menos 2 veces la frecuencia máxima).
+
+Cada muestra se cuantiza (se le asigna un valor binario).
+
+Así, obtenemos una secuencia de 0s y 1s.
+
+Ejemplo con la voz:
+
+Voz ocupa hasta 3,4 kHz → se muestrea a 8 kHz.
+
+Cada muestra = 8 bits → 64 kbps.
+
+Eso es lo que se transmite en digital (como en telefonía).
+
+🔹 4. ¿Por qué lo digital es más confiable?
+
+Porque lo digital es discreto: solo hay que distinguir entre “0” y “1”.
+
+Si hay un poco de ruido, mientras se pueda seguir reconociendo el bit, la información se conserva intacta.
+
+Además, se pueden usar códigos detectores y correctores de error (como Hamming, CRC) para recuperar la información si un bit se alteró.
+
+👉 En cambio, en analógico no hay forma de reconstruir perfectamente lo original una vez que se degrada.
+
+🔹 5. Reconstrucción en el receptor
+
+El receptor toma la señal digital recibida (bits).
+
+Los decodifica → reconstruye la forma de onda analógica (por ejemplo, el altavoz reconstruye la voz).
+
+Si la digitalización se hizo bien, lo que escuchás es muy cercano al original, aunque haya habido ruido en la transmisión.
+
+📌 En síntesis:
+
+El mundo es analógico, pero lo digital nos permite transmitir con confiabilidad porque es robusto al ruido y se puede corregir.
+
+El truco está en convertir analógico ↔ digital ↔ analógico de forma adecuada.
+```
+
+### TEOREMA DE NYQUIST
+Cuando yo quiero muestrear una señal de modo que la señal no pierda sus propiedas cuando la trate de reconstruir del otro lado del canal de comunicación, esa frecuencia de muestreo debe ser al menos dos veces la frecuencia máxima de la señal.
+
+Si yo tengo una señal de 1Hz, voy a necesitar que la frecuencia de muestreo sea de al menos el doble(2Hz O MAS!) garantizandonos que vamos a poder reconstruir la señal una vez muestreada (pudiendo digitalizar las señales continuas).
+
+Nyquist: FM >= 2 * FS 
+FM: FRECUENCIA DE MUESTREO
+FS: FRECUENCIA DE SEÑAL
+
+```
+🔹 1. ¿Qué significa?
+
+Una señal analógica tiene un rango de frecuencias (ej: tu voz puede tener hasta ~3,4 kHz).
+
+Para poder digitalizarla (muestrearla en 0 y 1), hay que tomar muestras de ella a intervalos regulares.
+
+El teorema de Nyquist dice:
+👉 La frecuencia de muestreo (FM) debe ser al menos el doble de la frecuencia máxima (FS) de la señal.
+
+Esto asegura que la señal puede reconstruirse después sin perder información.
+
+🔹 2. Ejemplo numérico
+
+Señal de 1 Hz (oscila 1 vez por segundo).
+
+FM mínima = 2 Hz → debo tomar 2 muestras por segundo para capturarla.
+
+Voz humana (hasta ~3,4 kHz).
+
+FM mínima ≈ 6,8 kHz.
+
+En telefonía se usa 8 kHz (un poquito más, para margen).
+
+Cada muestra se guarda en 8 bits → 8.000 × 8 = 64 kbps por canal de voz.
+👉 De ahí salen los famosos 64 kbps del canal telefónico digital (E1).
+
+🔹 3. ¿Qué pasa si muestreo más lento?
+
+Si FM < 2·FS → ocurre aliasing:
+
+La señal reconstruida no es igual a la original.
+
+Aparecen “frecuencias fantasmas” y la señal queda distorsionada.
+
+🔹 4. Idea clave
+
+El muestreo es como sacar fotos de un movimiento.
+
+Si sacás fotos lo suficientemente seguido (>= 2× por ciclo), podés reconstruir el movimiento.
+
+Si sacás pocas, perdés detalles o incluso ves “otra cosa” (aliasing, como en las ruedas de autos que parecen girar al revés en las pelis 🎥).
+
+📌 Resumen:
+
+Nyquist: FM ≥ 2·FS.
+
+Garantiza que una señal analógica puede digitalizarse y luego reconstruirse sin pérdida de info.
+
+Ejemplo práctico: voz digitalizada en telefonía = 8 kHz × 8 bits = 64 kbps.
+```
+
+---
+
+Entonces: Tenemos una señal analogica, la muestreamos, nos queda una señal digitalizada con una forma lo suficientemente feaciente como para que despues se pueda reconstruir y luego de que la señal está cuantizada debemos convertirla en 1 y 0's (no es lo mismo discretizar que digitalizar(0 y 1)).
+
+Señal analogica -> Digitalizacion -> Transformamos a valores cuantizados en binarios (con un codificador o conversor) que son los que vamos a terminar utilizando para la transmicion -> Quien reciba esta transmicion, debera tener un deconversor para poder volver a la señal digitalizada y reconstruirla a partir de esas muestras de frecuencia enviadas.
+
+![AD](img/conversorAD.png)
+
+---
+
+```
+🔹 1. Señal analógica (A)
+
+Es la original, continua (ej: tu voz).
+
+Tiene infinitos valores posibles en el tiempo.
+
+🔹 2. Muestreo (discretización) → señal B
+
+El muestreador toma “fotos” de la señal analógica a intervalos regulares (según la frecuencia de muestreo).
+
+Ahora la señal ya no es continua, sino que son puntos discretos en el tiempo.
+
+PERO: los valores de cada punto todavía pueden ser infinitos (ej: 2,79 V; 5,86 V, etc.).
+
+👉 Discretizar = hacer discreto en el tiempo, no en amplitud.
+
+🔹 3. Cuantización y codificación → señal C
+
+Cada muestra debe convertirse a un número binario.
+
+Para eso, se cuantiza: se redondea el valor continuo de la muestra a un nivel fijo (ej: 256 niveles si son 8 bits).
+
+Después se codifica en binario (ej: nivel 27 → 00011011).
+
+Así obtenemos una secuencia de 0 y 1 lista para transmitir.
+
+👉 Digitalizar = discretizar en tiempo + cuantizar en amplitud + codificar en binario.
+
+🔹 4. Reconstrucción en el receptor
+
+El receptor hace el proceso inverso:
+
+Recibe la secuencia de bits.
+
+Los decodifica en niveles cuantizados.
+
+Reconstruye una onda analógica aproximada (lo que escuchás por el auricular).
+
+📌 En resumen:
+
+Discretizar (muestreo): cortar la señal en instantes → puntos en el tiempo.
+
+Cuantizar: redondear la amplitud de cada punto a niveles posibles.
+
+Digitalizar: convertir esos niveles en 0s y 1s para transmitir.
+
+👉 Vos lo escribiste casi perfecto, solo faltaba aclarar la diferencia fina: discretizar ≠ digitalizar. Discretizar es solo cortar en el tiempo; digitalizar incluye el paso extra de cuantización + binarización.
+```
+
+### JERARQUÍA DE TRANSMISIÓN
+
+![jerTransmision](img/jerTransmision.png)
+
+```
+A ver si entiendo. La voz tiene una frecuencia maxima de 3,4kHz. Por teorema de Nyquist, para poder reconstruirla despues de una transferencia, debemos de muestrearla minimo en el doble (6,8kHz), pero para redondearlo, se suele hacer con 8kHz. Lo que no entiendo es: "con 8 bits nos arroja una trama de 64Kbps."
+
+
+
+¡Perfecto, Lucas 🙌! Lo que escribiste de la frecuencia de la voz y Nyquist está 100% bien.
+Lo único que falta conectar es: ¿de dónde salen los 8 bits y cómo eso lleva a los 64 kbps?
+
+🔹 1. Muestreo (8 kHz)
+
+Tomamos 8000 muestras por segundo de la señal de voz (por el teorema de Nyquist).
+
+Cada muestra es un valor de la onda de voz en ese instante.
+
+🔹 2. Cuantización
+
+Ahora tenemos que convertir cada muestra en un número binario.
+
+En telefonía digital se usan 8 bits por muestra → 2⁸ = 256 niveles de amplitud distintos.
+
+O sea: cada muestra puede “elegir” un valor entre 256 posibles.
+
+👉 Cuantos más bits uses, más “fina” es la calidad de la reconstrucción (menos distorsión). Para voz telefónica alcanza con 8 bits.
+
+🔹 3. Tasa de transmisión
+
+Hacemos la cuenta:
+
+8000 muestras/segundo × 8 bits/muestra = 64.000 bits/segundo
+
+Eso es 64 kbps.
+
+👉 Cada llamada telefónica digital ocupa un canal de 64 kbps.
+
+🔹 4. ¿Por qué dicen “trama de 64 kbps”?
+
+Porque la transmisión digital de voz se organiza en tramas de tiempo, donde cada canal aporta sus 64 kbps.
+
+En un E1 (2 Mbps), hay 32 de estos canales de 64 kbps.
+
+Cada usuario hablando ocupa su ranura fija de 64 kbps en la trama.
+
+📌 Resumiendo:
+
+8 kHz = cuántas muestras tomás por segundo.
+
+8 bits = cuánto “pesa” cada muestra.
+
+Juntos → 64.000 bits/s = 64 kbps por canal de voz digitalizado.
+```
+
+```
+🔹 1. 8 kHz de muestreo
+
+Significa que se toman 8000 muestras por segundo de la señal de voz.
+
+Cada muestra es “una foto” de la amplitud de la onda.
+
+🔹 2. 8 bits por muestra
+
+Cada muestra se representa con 8 bits → 256 valores posibles (2⁸).
+
+Eso es suficiente para representar la voz de manera entendible (aunque no con calidad Hi-Fi).
+
+🔹 3. Tasa resultante
+
+En 1 segundo se transmiten:
+
+8000 muestras × 8 bits = 64.000 bits
+
+Eso es 64 kbps.
+
+👉 Cada llamada digital de voz ocupa un canal de 64 kbps.
+
+🔹 4. ¿Qué es una “trama”?
+
+Ojo acá: trama no es lo mismo que “bits por segundo”.
+
+Tasa de bits (64 kbps): velocidad de transmisión.
+
+Trama: es la unidad estructurada de transmisión en sistemas digitales.
+
+Por ejemplo, en E1 (2 Mbps) se arma una trama de 32 canales (cada uno 64 kbps).
+
+Cada “trama” se transmite 8000 veces por segundo (igual que el muestreo).
+
+Dentro de cada trama, hay una ranura de tiempo fija (time slot) para cada canal de voz.
+
+👉 Entonces:
+
+64 kbps = la velocidad de un canal de voz digitalizado.
+
+Trama = el bloque que organiza esos bits en el tiempo para que puedan multiplexarse muchos canales juntos.
+
+📌 Ejemplo:
+
+Una trama E1 (2 Mbps) tiene 32 time slots (TS0–TS31).
+
+Cada time slot lleva 8 bits de un canal de voz.
+
+La trama se repite 8000 veces por segundo → cada canal de voz mantiene sus 64 kbps.
+```
+
+Existen protocolos de transmición de datos (un lenguaje), que nos dirán a traves de una jerarquia de transmición, como se va a hacer la transmición. 
+
+Si tenemos un canal de voz de 64Kbps (doble de la frecuencia maxima de la voz 8kHz con 8 bits).
+
+Luego, si tomamos 32 canales de 64Kbps vamos a tener la trama E1: 2048Kbps = 2Mbps  
+
+Trama: Una forma en que se ponen los datos para hacer la transmicion. El protocolo de transmicion de datos es SDH. Las tramas tienen determinadas caracteristicas. Existe una jerarquia europea con diferentes tramas tomandola de a 32 canales. Luego tendremos una jerarquia norteamericana que se tomaran de a 24 canales.
+
+```
+Perfecto que lo traigas 🙌, porque esta diapositiva (la 5: Jerarquía de transmisión) es densa pero clave para entender cómo escalamos desde un canal de voz digital hasta redes de gigabits. Vamos paso a paso:
+
+🔹 1. El punto de partida: un canal de voz
+
+Ya vimos que la voz se digitaliza con:
+
+Muestreo: 8 kHz
+
+Cada muestra: 8 bits
+
+Entonces:
+8.000 × 8 = 64 kbps
+
+👉 Cada llamada telefónica digital ocupa 64 kbps.
+
+🔹 2. Multiplexación: juntar varios canales
+
+Si juntamos 32 canales de 64 kbps → 2.048 kbps ≈ 2 Mbps
+Eso es una trama E1 (Europa).
+
+En SONET (EE.UU.), la unidad base eran 24 canales → 1.5 Mbps (T1).
+
+👉 Acá arranca la jerarquía: de un canal pasamos a tramas más grandes juntando varios.
+
+🔹 3. Continuando con SDH (Synchronous Digital Hierarchy)
+
+La jerarquía sigue escalando con multiplexación:
+
+E1 = 2 Mbps
+
+E3 = 34 Mbps
+
+En SDH se usan las tramas STM (Synchronous Transport Module):
+
+STM-1 = 155 Mbps
+
+STM-4 = 622 Mbps
+
+STM-16 = 2.5 Gbps
+
+STM-64 = 10 Gbps
+
+STM-256 = 40 Gbps
+
+👉 Son como contenedores cada vez más grandes que se forman de juntar muchos E1/E3.
+
+🔹 4. ¿De dónde salen esas fórmulas?
+
+Ejemplo: STM-1
+
+Se transmite 8000 veces por segundo (igual que la voz, 8 kHz).
+
+Cada trama tiene:
+
+270 columnas × 9 filas × 8 bits = 19.440 bits ≈ 2,4 KB.
+
+Multiplicado × 8000 → 155 Mbps.
+
+👉 Y los STM superiores (STM-4, STM-16, etc.) son múltiplos de STM-1.
+
+🔹 5. La idea general
+
+📌 Una llamada de voz son 64 kbps.
+Multiplexamos muchas → llegamos a 2 Mbps (E1).
+Multiplexamos E1 → STM-1 (155 Mbps).
+Y seguimos escalando hasta Gbps para backbone.
+
+👉 En otras palabras: la jerarquía de transmisión es como contenedores de carga:
+
+Cada “cajita” = una llamada de voz (64 kbps).
+
+32 cajitas = un pallet (E1).
+
+Varios pallets = un contenedor (STM-1).
+
+Varios contenedores = un barco (STM-64)… 🚢
+```
+
+```
+Pero si una llamada de voz son 64kbps y con un solo canal ya lo completamos, para que juntamos varios canales? 
+ChatGPT dijo:
+
+¡Excelente pregunta, Lucas! 🙌
+Ahí estás viendo la diferencia entre un canal de voz individual y la necesidad de una infraestructura de red.
+
+🔹 1. Una llamada individual
+
+Sí, una sola llamada ocupa 64 kbps.
+
+Si solo hubiera una persona en el mundo hablando, con un canal ya alcanzaría.
+
+🔹 2. El problema: miles/millones de llamadas
+
+En la realidad, una red telefónica o de datos tiene que soportar muchísimas llamadas simultáneas.
+
+No vas a tirar un cable aparte de 64 kbps para cada usuario: eso sería carísimo e impráctico.
+
+👉 Solución: multiplexar muchas llamadas en un mismo medio de transmisión.
+
+🔹 3. Multiplexación por tiempo (TDM)
+
+Se arma una trama donde cada llamada ocupa un “time slot” fijo.
+
+Ejemplo en E1 (Europa):
+
+32 canales × 64 kbps = 2 Mbps.
+
+Cada canal tiene reservado su time slot de 8 bits, repetido 8000 veces/segundo.
+
+Así, en un solo enlace de 2 Mbps podés transportar 32 llamadas simultáneas.
+
+🔹 4. Por qué seguimos agrupando
+
+Si quiero transportar miles de llamadas (ej: entre ciudades), no me sirve un enlace de 2 Mbps.
+
+Entonces agrupo varios E1 → tramas más grandes → STM-1 (155 Mbps), STM-4 (622 Mbps)… hasta Gbps.
+
+Esto escala la red para soportar muchos usuarios de manera eficiente.
+
+📌 Analogía:
+
+Una llamada de 64 kbps es como una persona viajando en un auto.
+
+Un E1 (2 Mbps) es como un colectivo que lleva 32 personas a la vez.
+
+Un STM-1 (155 Mbps) es como un tren con decenas de vagones.
+
+La jerarquía de transmisión es cómo vamos pasando de autos → colectivos → trenes → autopistas para transportar cada vez más tráfico. 🚍🚆
+
+👉 Entonces:
+
+Un canal de 64 kbps sirve para 1 llamada.
+
+Multiplexar varios canales en una trama sirve para que un solo enlace físico transporte muchas llamadas al mismo tiempo → eficiencia y escalabilidad.
+```
+
+### SDH: SYNCHRONOUS DIGITAL HIERARCHY
+
+Jerarquia digital sincronizada. Es un protocola de transmicion de datos.
+
+```
+Muy buena observación 👌, tu profesora tiene razón: SDH es un protocolo de transmisión (más bien, un estándar de transmisión digital síncrona). Te lo bajo a tierra:
+
+🔹 1. ¿Qué es SDH?
+
+SDH (Synchronous Digital Hierarchy) es un estándar internacional que define cómo organizar y transportar tramas digitales de alta capacidad (voz, datos, video) sobre enlaces de fibra óptica.
+
+Fue creado para unificar cómo se multiplexaban los famosos E1, E3, etc. en Europa y T1, T3 en EE.UU.
+
+👉 SDH = reglas + formato para que distintas redes puedan interconectarse y transportar datos digitales de forma ordenada y síncrona.
+
+🔹 2. ¿Cómo funciona?
+
+Contenedor: Cada flujo de datos (ej: un canal de voz digital, un E1) se encapsula en un contenedor SDH.
+
+Cabeceras de control: Se agregan bytes de overhead (información extra) que permiten:
+
+Identificar el contenido.
+
+Hacer gestión, monitoreo y corrección de errores.
+
+Multiplexación: Se intercalan muchos contenedores dentro de una trama STM (Synchronous Transport Module).
+
+Jerarquía:
+
+STM-1 = 155 Mbps
+
+STM-4 = 622 Mbps
+
+STM-16 = 2,5 Gbps
+
+STM-64 = 10 Gbps
+
+STM-256 = 40 Gbps
+
+👉 Cada nivel superior se forma juntando varios STM-1.
+
+🔹 3. Equivalente en EE.UU.: SONET
+
+En América del Norte se usa SONET (Synchronous Optical Network), que es muy parecido a SDH pero con nombres distintos.
+
+Ejemplos:
+
+T1 / DS1 = 1,536 Mbps
+
+T3 / DS3 = 44,736 Mbps
+
+OC-3 = 155 Mbps (equivale a STM-1)
+
+OC-12 = 622 Mbps (equivale a STM-4)
+
+OC-48 = 2,488 Gbps (equivale a STM-16)
+
+🔹 4. ¿Por qué es importante?
+
+Permite que operadores de telecomunicaciones en todo el mundo usen la misma “jerarquía digital” para transportar miles de llamadas, datos de Internet, etc., sobre fibra óptica.
+
+Fue fundamental en los 90s y 2000s para el crecimiento de Internet.
+
+Hoy en día, SDH/SONET está siendo reemplazado por tecnologías más modernas (DWDM, Ethernet sobre óptica), pero sigue siendo la base conceptual.
+
+📌 En resumen:
+
+SDH = estándar de transmisión síncrona en fibra óptica.
+
+Es un “protocolo” porque define cómo organizar datos en tramas jerárquicas (STM-1, STM-4, …).
+
+En EE.UU. se llama SONET, con nomenclatura distinta pero equivalente.
+```
+
+### DETECCIÓN DE ERRORES EN TX
+
+Si yo quiero detectar errores, voy a tener un costo. 
+
+P.ej queremos transmitir A y B donde A y B es un codigo de distancia 1 (siempre va cambiando de a 1 bit a medida que se cambia a la siguiente palabra). Tenemos varias maneras de poder detectar un error. Una posibilidad si yo tengo un codigo de distancia 1 y me llega algo de distancia 2 es que hubo un bit que cambio (es parte de un error). Cuando eso sucede, yo puedo detectar el error pero no puedo hacer nada!. Cuando hay errores que se detectan pero no se pueden corregir, se pide una nueva transmicion. Lo ideal es que no tenga que volverlo a pedir, sino que lo pueda corregir.
+
+Aqui, entra el código de Hamming.
+
+Si nosotros ponemos un bit de paridad (1 si son impares). Si a mi me mandan el bit de paridad y veo que no coinciden con la cantidad de 1 que tengo en A y B, se que tengo un error (y no lo puedo corregir tampoco). Con bit de paridad, el código resultante es de distancia 2.
+
+![errores](img/errores.png)
+
+Viendo los bits de redundancia, sirve para saber si lo que se recibe es o no es correcto. 
+
+- CONCEPTO DETRÁS DE HAMMING: 
+    - Para corregir n bits erróneos es necesario una distancia d=2n+1.
+    - Con d=1 no detecto; con d=2 detecto el cambio de 1bit; con d=3 puedo corregir hasta 1 bit.
+    - Distancia de un código: Número de bits que deben modificarse de una combinación cualquiera a otra para que esa combinación se convierta en la otra. SE APLICA CRITERIO DE DISTANCIA MÍNIMA.
+
+Las probabilidades de error de bits son muy bajas con los metodos de transmicion que hay. Mucho mas bajas (nosotros las tomamos como imposibles) es que haya error en 2 bits, por eso ni lo planteamos! Si hay error, es de 1 bit. Si lo corregimos, obtenemos el mensaje que fue enviado.
+
+Hamming nos da una cantidad de bits de redundancia que voy a tener que agregar para asegurarme que puedo detectar el error y ademas, corregirlo.
+
+![err1](img/err1.png)
+
+![err2](img/err2.png)
+
+![ejemplo](img/ejemplo.png)
+
+Si no hay ningun error, P1, P2 y P4 deberian de haber dado 0. Como vemos que hay un error en P2 y P4 buscamos cual es el bit que está en P2 y P4 pero NO en P1. Este es M6 -> Es el bit invertido. Si lo acomodo como (P4, P2, P1) = (1,1,0) = 6 en base 10 -> M6
+
+Si yo tengo todo bien, me deberia de dar (0,0,0). Si un K tiene un error, no me interesa ya que no es parte del mensaje (sino de la redundancia para el chequeo).
+
+### MULTIPLEXacion
+
+![MULTIPLEXacion](img/MULTIPLEXacion.png)
+
+La salida Z será la que se comunique con el canal de transmición.
+
+![MULTIPLEXacion2](img/MULTIPLEXacion2.png)
+
+Cuando yo mando a un canal de comunicaciones, nada tiene sentido si la persona del otro lado no entiende y no habla el mismo idioma que yo. Si yo voy a tener un multiplexor necesito que la persona que recibe en el receptor, tenga un demultiplexor. 
+
+El demultiplexor, tiene la misma logica que el multiplexor pero al reves. Tengo una unica entrada y dependiendo de las entradas de control, se envian a una única salida. #de salidas = 2^#entradas control.
+
+![DEMULTIPLEXacion](img/DEMULTIPLEXacion.png)
+
+![DEMULTIPLEXacion2](img/DEMULTIPLEXacion2.png)
+
+### Tipos de multiplexacion
+
+Existen varios tipos de multiplexación para transmisión de datos.
+
+#### TDM: Time Division Multiplexing
+
+(Por division de tiempo): Lo que va a ocurrir con cada uno de los usuarios (Cada persona que esté utilizando ese canal de información), va a contar con un slot dentro de la totalidad del canal de comunicación. El mismo canal, dividido en slots de tiempo para compartirlo.
+
+- TDM Sincronico (STDM): Los intervalos de tiempo están predefinidos y se asignan de manera fija. Cada canal tiene un tiempo específico para enviar sus datos, independientemente de si hay datos para enviar o no.
+
+- TDM Asíncrono (ATDM): Los intervalos de tiempo no están predefinidos y se asignan dinámicamente según la disponibilidad de datos. En este caso, si un canal no tiene datos para enviar, ese tiempo puede ser utilizado por otro canal.
+
+La multiplexación por división de tiempo es una técnica para compartir un canal de transmisión entre varios usuarios. Consiste en asignar a cada usuario, durante unas determinadas "ranuras de tiempo", la totalidad del ancho de banda disponible. 
+
+#### FDM: Frequency Division Multiplexing
+
+(Por division de frecuencia): Distintas frecuencias que se le asignan a cada uno de los transmisores. Deben estar lo suficientemente separadas para que no haya interferencias entre canales.
+
+La multiplexación por división de frecuencia es una técnica que consiste en dividir mediante filtros el espectro de frecuencias del canal de transmisión y desplazar la señal a transmitir dentro del margen del espectro correspondiente mediante modulaciones, de tal forma que cada usuario tiene posesión exclusiva de su banda de frecuencias.
+
+#### WDM: Wavelength Division Multiplexing
+(Por division de longitud de ondas)
+
+Por último para WDM se basa en la partición de colores de la longitud de onda de la señal.
