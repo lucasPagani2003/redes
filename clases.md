@@ -1081,3 +1081,61 @@ La multiplexación por división de frecuencia es una técnica que consiste en d
 (Por division de longitud de ondas)
 
 Por último para WDM se basa en la partición de colores de la longitud de onda de la señal.
+
+# Clase 4. Martes 02/09
+
+## Redes de Datos & Modelo de Capas
+
+Una **red de datos** es un sistema informático, son entornos complejos que implican la existencia de múltiples medios y tienen como finalidad conectar dos o más dispositivos, para permitir la transmisión, además del intercambio de información y recursos.
+
+Las redes fueron creadas al usino de las primeras PCs (a fines de la década de 1960). Para no mover fisicamente las computadoras para poder transmitir datos entre dispositivos, el Departamento de Defensa financió la creación de la primera red informática en funcionamiento que denominaron ARPANET.
+
+### Clasificación de las redes de datos: 
+
+- Red de area local: Una red **LAN** conecta a usuarios y aplicaciones en una proximidad geográfica cercana (misma edificio).
+
+- Red de area extendida: Una red **WAN** conecta a usuarios y aplicaciones en ubicaciones geográficamente disperas (extremo a extremo en cualquier parte del mundo).
+
+Estación de amarre: Sitio del provedor de servicio donde el cable termina, el cable se abre para conectar el servicio de red.
+
+El ancho de banda en una red lan, es mucho mas economico que contratar ese mismo ancho de banda en una red telefonica en una red wan. 
+
+Los routers (manejo de direcciones y protocolos de enroutamiento para saber donde mandar los paquetes) son dispositivos IP de capa 3. 
+
+La red Lan to Lan se comercializaba bajo el concepto de metro. Era un protocolo metro con alta transicion de datos. Era extender el nivel Lan de un edificio para que se vea como de capa dos en el otro edificio.
+
+El router es un dispositivo de capa 3 porque hace routeo ip. 
+
+En el caso de una red Lan tiene beneficios desde el lado economico pero tiene un cierto alcance (en ciudades y con limitantes). 
+
+En la red WAN, los routers hablan contra routers de borde de una red. El enlace entre los routers (de un cliente y el borde) son un enlace de una red de acceso para llegar a la red de transporte.
+
+### Modelos de Capas OSI
+
+El modelo Open Systems Interconnection (OSI) es un modelo conceptual creado por la Organización Internacional para la Estandariazción, el cual permite que diversos sistemas de comunicación, se conecten usando protocolos estándar.
+
+Estos estandares permiten que los equipos puedan comunicarse entre sí.
+
+Es un lenguaje universal para la conexion de las redes de equipos. El concepto es divider un Sistema de comunicacion en 7 Capas Abstractas, cada una apilada sobre la inferior.
+
+![OSI](img/OSI.png)
+
+Columna vertebral para entender la materia de redes. Desde la capa física (capa de transmisión de bits a traves de un medio alambrico o radio frecuencia) hasta la capa de aplicación. La capa 1 o capa física define las especificaciones eléctricas, mecánicas, procedimientales y funcionales para activar, mantener y desactivar en enlace físico
+
+La capa de acceso a los medios (Enlace de Datos o capa 2): Basada en las direcciones de las tarjetas de red de cualquier dispositivo. Esta capa proporciona un tráfico confiable de los datos por un enlace físico. Al hacerlo, la capa de enlace de datos se ocupa del direccionamiento físico de la topología de red. Se ocupa de la entrega ordenada de tramas y el control de flujo de información. Estas tramas se entregan de un nodo a otro.
+
+La capa 3 (Red): Empieza a trabajar las direcciones y el enrutamiento (con ROUTERS. Definen las rutas, de donde un punto tiene que verse a traves de otro punto). Permite tener conectividad entre dos redes mediante el enrutamiento de rutas(pueden ser geograficamente separadas). El direccionamiento de capa de red establece la dirección de origen y de destino. Estas direcciones no cambian a lo largo de la ruta. 
+
+La capa 4 de transporte, maneja las conexiones de extremo a extremo (TCP y UDP) de la información, en la que se incluye la recuperación de errores y el control del flujo.
+
+La capa 5 es la de sesion que establece, administra y termina sesiones entre Host. Controla el dialogo entre dispositivos o hosts. Establece, administra y termina sesiones entre aplicaciones.
+
+La capa 6 estandariza la forma en que se presentan los datos pensado para la transmición de la información de la aplicación. ¿Como presentarle la información a la capa superior (capa 7).
+
+Por ultimo en la capa 7 se encuentran los procesos de la red a la aplicación. Es la capa del modelo que identifica el partícipe de la comunicación y proporciona funciones para determinados servicios de aplicación como transferencia de archivos y los terminales virtuales. Es la capa que se interpone con nosotros. Yo no hablo con el cable, lo hago con la aplicación. 
+
+### SDH: Synchronous digital hierarchy
+
+La trama SDH va encapsulado en un tipo especial de estructura denominada contenedor. Una vez encapsulados se añaden cabeceras de control que identifican el contenido de la. 
+
+En la jerarquia SDH cuando yo tengo 32 canales de 64kb&/S se conoce como trama E1. Los amercianos usan 24 canales que se conocen como trama T1. 
