@@ -1139,3 +1139,72 @@ Por ultimo en la capa 7 se encuentran los procesos de la red a la aplicación. E
 La trama SDH va encapsulado en un tipo especial de estructura denominada contenedor. Una vez encapsulados se añaden cabeceras de control que identifican el contenido de la. 
 
 En la jerarquia SDH cuando yo tengo 32 canales de 64kb&/S se conoce como trama E1. Los amercianos usan 24 canales que se conocen como trama T1. 
+
+# Clase 5. Viernes 05/09
+
+Modelo OSI: modelo de 7 capas. La 1 es la fisica.
+
+## Infraestructura de redes. Tecnologias de cobre
+
+Hoy vamos a ver el medio de transmicion de la capa 1: Tecnologias de cobre
+
+### Par Trenzado
+
+Cable. Es un medio fisico ALAMBRICO. Utiliza distintos pares de cobre, trenzados entre si para poder transmitir distintas señales electricas. El diseño trenzado ayuda a reducir la interferencia electromagnética de fuentes externas, y para ayudar a reducir la diafonía dandole mas efectividad y productividad. 
+
+La capacidad de transporte en términos de ancho de banda es inversamente proporcional a la distancia. 
+
+- Ventajas:
+    - Suele ser más economico 
+    - Es flexible
+    - Tiene una vida util amplia
+    - Tiene menos posibilidad de daño superficial
+    - Previene interferencias
+
+- Desventajas: 
+    - Tiene limitaciones para la transmisión de señales a grandes distancias de transmisión sin degradación de la señal.
+    - Limitaciones para trabajar a distancias elevadas sin regeneración.
+    - Suele tener mayor tasa de error en respecto a otros tipos de cable (el cobre esta en problemas con la interferencia, la humedad).
+
+#### Diafonía (crosstalk)
+
+El par trenzado son hilos de cobre entrlazados helicoidalmente para minimizar la interferencia electromagnetica de fuentes externas. 
+
+Por un tema constructivo, de diseño en altas frecuencias se produce la diafonia.
+
+- Diafonia en el extremo cercano (NEXT): La interferencia se genera cerca del transmisor, afectando a los datos de TX, filtrandose a los pares cercanos
+
+- Diafonia en el extremo lejano (FEXT): La interferencia se produce en el receptor, afectando la calidad de la señal recibida en el otro extremo del cable. 
+
+- Cto mayor es el cable, mayor es la probabilidad de diafonia. 
+- Las señales de alta frecuencia son mas propensas a causar interferencias.
+- Los cables de menor calidad o sin blindaje son mas vulnerables
+- Distancias mas cortas reducen la probabilidad de interferencias
+- Cables con categorias mas altas mejoran la diafonia
+
+Tx = TRANSMISION
+Rx = RECEPCION
+
+#### Conectividad Ethernet
+
+Un canal tipico actual es de máximo 100m. Por otro lado, existen otras soluciones en cobre que permiten extender esta distancia más. 
+
+Vamos a encontrar ethernet en automatizacion, en la automotriz, en el area enterprise, la parte cloud (centro de datos) y en los provedores de servicios (provision de servicios a consumo masivo).
+
+
+- Categorias: 
+    - Categoria 3: En los 90's. La frecuencia era baja (16MHz).
+    - Fue avanzando en el pasar de los años hasta la Categoria 8, subiendo la velocidad de la frecuencia hasta la actual (2000MHz) (o mas pq es 2010).
+
+    Las 6A empezo a ser la mas predominante ya que asegura los 100 metros (hay algunas q prometen velocidades pero hasta 50 metros).
+
+    Siempre nos vamos a encontrar con la 6 o 6A que la velocidad es de 10gb y llega a 100m. La frecuencia es de hasta 500MHz.
+
+    ![parTrenzado](img/parTrenzado.png)
+
+- Cables de PAR TRENZADOS típicos: 
+    - UTP: Sin blindaje. Más barato, pero mas susceptible a interferencias
+    - STP: Con blindaje por par. Mejor protección.
+    - FTP: Blindaje general para todos los pares.
+    - S/FTP o SF/UTP: Blindaje combinado. Alta proteccion, uso en ambientes con muchas interferencias electromagnéticas. 
+
