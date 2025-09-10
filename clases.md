@@ -6,19 +6,144 @@ https://www.youtube.com/watch?v=SoocbjAmnnI&list=PLgjTEtKoGsVoxJIuvWQH-HLS33xVZT
 
 Las telecomunicaciones han sufridos grandes cambios a partir del esquema telefónico (capacidad de digitalización de la voz). 
 
+A partir de la capacidad de digitalizacion de la voz, asumen los roles las tramas de datos. Los 4kHz de ancho de banda de la voz, aplicado con el teorema de Nyquist -> estamos en 8kHz codificado con 8 bits en un conversor analogico digital, me entregan los famosos 64kb/s. Se lo conoce como la trama o el canal de voz sin compresion. De ahí arranca toda la jerarquia de comunicaciones que conocemos hasta el dia de la fecha. 
+
 ```
-64kb/s se lo conoce como la trama o canal de voz sin compresion (dato a chequear)
+🔊 1. ¿Qué es la “frecuencia de la voz”?
+
+La voz es un sonido → es una onda mecánica en el aire.
+
+Como cualquier onda, está compuesta de muchas frecuencias (agudos, graves, armónicos).
+
+En telefonía se decidió transmitir solo un rango de esas frecuencias: 300 Hz a 3400 Hz ≈ 4 kHz de ancho de banda útil.
+
+👉 Esto NO significa que la voz “tenga 4 kHz” exactos, sino que su contenido está limitado a 4 kHz (es decir, las vibraciones de tus cuerdas vocales y resonancias generan frecuencias hasta aprox. 3400 ciclos por segundo).
+
+🎚️ 2. ¿Qué significa “4 kHz” en este contexto?
+
+4 kHz = 4000 ciclos por segundo.
+
+No son “4000 muestras” sino 4000 oscilaciones de la onda analógica en un segundo.
+
+Ejemplo: un tono puro de 1 kHz vibra 1000 veces por segundo; la voz humana, al hablar, tiene un montón de frecuencias mezcladas que llegan hasta unas 3400–4000.
+
+💻 3. ¿Qué hace la digitalización?
+
+Acá entra Nyquist:
+
+Para capturar una señal analógica sin perder información, debo muestrearla al menos al doble de su frecuencia máxima.
+
+Si la voz llega hasta 4 kHz, entonces muestreo a 8 kHz = 8000 muestras por segundo.
+
+Cada muestra es un número (codificado en 8 bits) que representa “qué valor tenía la onda en ese instante”.
+
+📊 4. La confusión común
+
+4 kHz (voz) = límite del contenido en frecuencia → cuántas veces vibra la onda en un segundo.
+
+8 kHz (muestreo) = cuántas veces yo la miro y la anoto en un segundo.
+
+No es que el oído “escuche 4000 muestras”, sino que la onda de tu voz tiene vibraciones de hasta 4000 ciclos por segundo, y para captarlas en una computadora necesito “fotografiarlas” al doble de velocidad (8000 veces por segundo).
+
+🔑 Resumen con números:
+
+Voz: 300 Hz – 3400 Hz (≈4 kHz de ancho de banda).
+
+Muestreo: 8 kHz (8000 muestras/seg).
+
+Cada muestra: 8 bits.
+
+Flujo resultante: 64 kbps por canal de voz.
 ```
+
+Telegrafo óptico -> Comuniación "con banderitas"-
+
+Luego, era eléctrica -> Nuevo tipo de comunicaciones. Mediante **cables trasatlanticos**. Estan llenos de **fibra optica** que se van iluminando dependiendo los datos!
+
+Los cables trasatlanticos permitieron las primeras comunicaciones entre continentes.
+
+Los cables tienen una alta vida util a nivel de transporte. Lo que suele cambiar y upgradear son los protocolos/equipos de transmicion para sacarle el mayor provecho a las fibras opticas que pasan debajo del mar! Obviamente hay cambios y actualizaciones en estos cables para poder permitir mayor ancho de banda en la comunicación.
 
 La tecnologia y las telecomunicaciones han sido el motor de la economía mundial desde fines de los 90 hasta nuestros dias. Han cambiado la forma de hacer negocios.
 
-Los cables trasatlanticos permitieron las priemras comunicaciones entre continentes.
+### Internet. ¿Como nos conectamos a internet?
 
-### ¿Como nos conectamos a internet?
-
-A traves de una **red de acceso**! 
+A traves de una **red de acceso**!
 
 Nosotros tenemos un router (dispositivo de capa 3), que nos permite conectarnos hacia otro router, que está en el **borde de la red de transporte** (**Hostings center**).
+
+Telecom -> Usa la red de acceso (Fibra que llega al hogar, servicio de cable modem, servicio de adcl hederada de la vieja telefonica utilizando el cable cobre.). Una vez que ese paquete ip llega al borde de la red, la misma tiene la suficiente inteligencia para ir rooteando ese paquete a su destino. 
+
+Si estoy buscando una pagina web, estoy buscando una direccion ip en donde la red conoce el camino para mandar ese paquete. 
+
+Entonces, como nos conectamos a internet? Depende de la red de acceso, depende de la red de transporte, etc. 
+
+Si yo quiero mandar un paquete a la red de telecom, pero el contenido esta en la red de telefonica, deberia de haber una conexion entre los dos backbones (**peering**) para poder hacer el traspaso de ese tráfico. Ese es el concepto subyacente en las redes WAN (wide area network) en cualquier comunicacion de internet de hoy en dia (audio, video, voz). Todo se transporta a traves de medio digitales y direcciones ip!
+
+![internet](img/Internet.png)
+
+```
+🌐 ¿Cómo nos conectamos a Internet?
+1. Red de Acceso
+
+Es lo que tenemos en casa o en la empresa.
+
+Nuestro router (Capa 3, hace NAT, asigna IPs en tu red local) → se conecta al ISP (Telecom, Telefónica, Claro, etc.).
+
+Tecnologías típicas:
+
+Fibra hasta el hogar (FTTH)
+
+Cablemodem (coaxil + DOCSIS)
+
+ADSL/VDSL (cobre de la vieja telefonía fija)
+
+👉 Esta es la “puerta de entrada” a la red del proveedor.
+
+2. Red de Transporte (Backbone del ISP)
+
+Una vez que el paquete IP entra a la red del proveedor, circula por su red troncal (routers de alta capacidad, fibra óptica, MPLS, etc.).
+
+El backbone tiene la “inteligencia” para enrutar (IP routing) y llevar el paquete hacia donde corresponda.
+
+3. Interconexión entre backbones (Peering)
+
+Si el destino está en otro proveedor, debe existir un enlace de interconexión entre backbones.
+
+Ejemplo:
+
+Yo soy cliente de Telecom
+
+Quiero acceder a una página que está hosteada en Telefónica
+
+Telecom y Telefónica deben tener acuerdos de peering o conectarse a un IXP (Internet Exchange Point) para intercambiar tráfico.
+
+👉 Sin peering, cada red sería una isla; con peering, Internet se vuelve un todo interconectado.
+
+4. Resolución de la página web
+
+Cuando tipeás un nombre (ej: www.ejemplo.com
+), primero tu equipo consulta al DNS para saber la dirección IP real.
+
+Una vez que conoce la IP, tu paquete viaja siguiendo la ruta más eficiente a través de:
+
+Red de acceso
+
+Red de transporte
+
+Peering hacia otros backbones
+
+Y llega finalmente al Hosting Center / Data Center donde está el servidor web.
+
+5. Concepto clave
+
+Todo en Internet (voz, video, streaming, gaming, redes sociales, etc.) se transporta como paquetes IP sobre infraestructuras digitales (fibra, satélite, radioenlaces, etc.).
+
+Las redes WAN (Wide Area Network) permiten esa interconexión global.
+
+👉 En otras palabras:
+Tu router → red de acceso (ISP) → backbone del ISP → peering con otros ISPs → red de transporte global → hosting center con el contenido.
+```
 
 ```
 🔹 1. Red de acceso
@@ -113,14 +238,14 @@ La red de acceso es “el camino para salir de tu casa y llegar a la autopista�
 La red de transporte (el backbone) es “la autopista inteligente” que sabe cómo llegar a cualquier destino (otra red, otro país, otro servidor).
 ```
 
----
+¿Qué es el **peering**? Intercambio de tráfico : Es la acción de que dos redes acuerden intercambiar el tráfico de datos que fluye entre sus usuarios. 
 
-- **Pudding**: La "interconexión entre backbones" se refiere a cómo las principales redes troncales de datos se conectan entre sí para formar una infraestructura de red más grande, como Internet, utilizando puntos de intercambio de datos (Nodos) y cables de alta capacidad para transportar el tráfico de redes más pequeñas.
+- **Peering**: La "interconexión entre backbones" se refiere a cómo las principales redes troncales de datos se conectan entre sí para formar una infraestructura de red más grande, como Internet, utilizando puntos de intercambio de datos (Nodos) y cables de alta capacidad para transportar el tráfico de redes más pequeñas.
 
 Este es el concepto subyacente de las redes WAN (Wide Area Network) en cualquier comunicación de internet de hoy dia (ya sea de datos, video o voz). 
 
 ```
-🔹 1. Pudding / Interconexión entre backbones
+🔹 1. Peering / Interconexión entre backbones
 
 Cada ISP grande (Telecom, Claro, Movistar, etc.) tiene su propio backbone (su red troncal IP/MPLS de alta capacidad).
 
@@ -137,7 +262,113 @@ Cables submarinos y enlaces de alta capacidad: conectan continentes y grandes re
 Esto es la esencia de una WAN (Wide Area Network) global.
 ```
 
+### Evolucion hasta la integracion
+
+Antes, para poder dar distintos tipos de servicios, usaba distintos tipos de redes. Por ejemplo, si queria una comunicacion telefonica, usaba una red de voz. Si queria una comunicacion de datos entre dos oficinas, tenia una red de transporte Lan to Lan. Todas eran redes/servicios separados. Esto, generaba una infraestructura de redes paralelas con un mínimo uso de los recursos.
+
+La integración (de voz y datos), ha permitido que todo tipo de trafico concluya en una unica red. La red IP (Internet protocol, capa 3) una red única multi-servicios.
+
+```
+📞📠 Antes de la integración
+
+Existían redes separadas, cada una dedicada a un servicio específico:
+
+Red de voz (telefonía) → conmutación de circuitos.
+
+Red de datos (LAN to LAN, SNA, Frame Relay, ATM, etc.).
+
+Red de video / TV por cable.
+
+Esto implicaba infraestructuras distintas (cables, equipos, mantenimiento) y mucho desperdicio de recursos, porque cada red estaba subutilizada.
+
+🌐 Con la integración
+
+Se unifica todo el tráfico (voz, datos, video) en una sola red basada en IP (Capa 3).
+
+Internet Protocol (IP) permite transportar cualquier tipo de información como paquetes.
+
+Surge el concepto de red multi-servicios:
+
+Telefonía → VoIP (Voz sobre IP).
+
+Video → Streaming, videollamadas.
+
+Datos → Web, archivos, aplicaciones corporativas.
+
+👉 Así, una única infraestructura física puede manejar todos los servicios.
+
+⚡ Beneficios de la integración
+
+Menores costos de despliegue y mantenimiento.
+
+Uso más eficiente de los recursos (una red en lugar de varias).
+
+Mayor flexibilidad para nuevos servicios (ej: WhatsApp combina voz, video y datos sin depender de redes separadas).
+
+🔑 En resumen:
+Antes: muchas redes → cada una para un servicio.
+Ahora: una única red IP → multi-servicios (voz, video, datos).
+```
+
+---
+
+Si yo quiero armar una **red de datos privada** entre dos locaciones, puedo utilizar la red IP (red publica de capa 3 de datos), pero puedo hacer un rooteo con direcciones privadas, permitiendome generar esa red de datos privada sobre una **red publica** con mucha capacidad de transporte. 
+
 - **LAN**: Local area network. 
+
+### Tipos de VPN
+
+![VPN](img/VPN.png)
+
+```
+📌 Qué muestra la imagen
+
+La diapositiva representa los tipos de VPNs (Redes Privadas Virtuales) que permiten extender una red LAN corporativa a través de redes públicas (Internet) de manera segura.
+
+Fijate que en el centro hay una nube de VPN → eso simboliza el túnel virtual cifrado que corre por Internet.
+
+Alrededor están los diferentes escenarios de uso:
+
+Casa Central (oficina principal de la empresa).
+
+Sucursal (otra oficina).
+
+Partner de Negocios (empresas externas conectadas).
+
+Trabajo en casa (empleado remoto).
+
+Usuario móvil (ej: alguien con notebook o smartphone en movimiento).
+
+Todos ellos se conectan de forma segura a la red corporativa a través de la VPN.
+
+📌 Qué quiere explicar
+
+Antes:
+
+Las empresas usaban líneas privadas dedicadas (carísimas) para conectar sucursales o dar acceso remoto.
+
+Ahora (con VPN):
+
+Usan la red pública (Internet) como transporte, pero cifrando la comunicación con túneles seguros.
+
+Así, una sucursal o un empleado remoto puede “ser parte” de la LAN corporativa como si estuviera físicamente en la oficina.
+
+📌 Tipos de VPN en la imagen
+
+VPN para Intranet → conecta sucursales de la misma empresa a bajo costo.
+
+VPN para Extranet → conecta a partners externos (nuevos modelos de negocio).
+
+VPN de Acceso Remoto → conecta a usuarios individuales (teletrabajo, móviles) mediante túneles encriptados.
+
+👉 Entonces, la imagen no está diciendo que “las LAN ya no existen”, sino que:
+
+Las LAN locales siguen existiendo (en la sucursal, casa central, etc.).
+
+Pero gracias a las VPN se pueden interconectar esas LAN a través de Internet, de forma segura, como si fuera una única red privada.
+```
+
+---
 
 Antes, todos los servicios eran separados. Si querias pasar voz, contratabas un servicio de voz. Si querias video, un servicio de video, y asi con cada dato que se deseaba pasar. 
 
